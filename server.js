@@ -1,10 +1,25 @@
 const express = require('express');
+const mongodb = require('mongodb');
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Correct path to the router file
-app.use('/', require('./routes'));
+const routes = require('./routes');
 
-app.listen(port, () => {
-  console.log(`Server on port ${port}`);
+// Use the routes
+app.use(routes);
+
+// Initialize MongoDB
+mongodb.MongoClient.connect('your-mongodb-connection-string', (err, client) => {
+  if (err) {
+    console.error('Failed to connect to the database. Error:', err);
+    process.exit(1);
+  }
+  console.log('Connected to the database');
+  const db = client.db('your-database-name');
+
+  // Start the server after successful database connection
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
 });
