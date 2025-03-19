@@ -15,8 +15,8 @@ mongodb.MongoClient.connect('your-mongodb-connection-string', (err, client) => {
     console.error('Failed to connect to the database. Error:', err);
     process.exit(1);
   }
-  console.log('Connected to the database');
-  const db = client.db('your-database-name');
+  console.log('project connected to the database');
+  const db = client.db('project1'); // Ensure you select the database
 
   // Start the server after successful database connection
   app.listen(port, () => {
