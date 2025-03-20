@@ -2,10 +2,15 @@ const express = require('express');
 const db = require('./data/db');
 const routes = require('./routes');
 const dotenv = require('dotenv');
+const path = require('path'); // Add this line
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, 'public'))); // Add this line
+
+app.use(routes);
 
 // Move the / route here
 app.get('/', (req, res) => {
@@ -26,8 +31,6 @@ app.get('/', (req, res) => {
     </script>
   `);
 });
-
-app.use(routes);
 
 db.intDb((err, database) => {
   if (err) {
