@@ -1,21 +1,22 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const { MongoClient } = require('mongodb'); // Destructure MongoClient
+
+const MongoClient = require('mongodb').MongoClient;
 let database;
 
-const intDb = async (callback) => {
+const initDb = (callback) => {
   if (database) {
-    console.log('Database already initialized!');
+    console.log('Db is already initialized');
     return callback(null, database);
   }
-  try {
-    const client = new MongoClient(process.env.MONGODB_URL);
-    await client.connect();
-    database = client.db('project1');
-    callback(null, database);
-  } catch (err) {
-    callback(err);
-  }
+  MongoClient.connect(process.env.MONGODB_URL)
+    .then((client) => {
+      database = client;
+      callback(null, database);
+    })
+    .catch((err) => {
+      callback(err);
+    });
 };
 
 const getDb = () => {
@@ -26,6 +27,6 @@ const getDb = () => {
 };
 
 module.exports = {
-  intDb,
+  initDb,
   getDb,
 };
